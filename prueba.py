@@ -18,16 +18,16 @@ def preprocess_frame(frame, new_shape=(84, 84)):
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     cropped_frame = gray[34:194, :]  # Adjust based on the game
     resized_frame = cv2.resize(cropped_frame, new_shape, interpolation=cv2.INTER_AREA)
-    normalized_frame = resized_frame / 255.0 * 2 - 1
+    normalized_frame = (resized_frame / 255.0) * 2 - 1
     return normalized_frame
 
 class FrameStack:
-    def _init_(self, k):
+    def __init__(self, k):
         self.k = k
         self.frames = deque([], maxlen=k)
 
     def reset(self, env):
-        obs, _ = env.reset()
+        obs, _ = env.reset(return_info = True)
         frame = preprocess_frame(obs)
         for _ in range(self.k):
             self.frames.append(frame)
@@ -169,7 +169,10 @@ def train(env_name="ALE/Kaboom-v5",
             state = next_state
             episode_reward += reward
 
-            epsilon = max(epsilon_end, epsilon - epsilon_decay_step)
+            #epsilon = max(epsilon_end, epsilon - epsilon_decay_step) VERSIÓN ANTIGUA
+            # Using floating-point arithmetic for epsilon_decay_step can accumulate precision errors; Then, we recalculate epsilon explictily: 
+            epsilon = max(epsilon_end, epsilon_start - total_steps * epsilon_decay_step) 
+
 
             if len(replay_buffer) > batch_size:
                 states, actions, rewards, next_states, dones = replay_buffer.sample(batch_size)
@@ -192,7 +195,7 @@ def train(env_name="ALE/Kaboom-v5",
                 optimizer.step()
 
                 episode_loss += loss.item()
-                loss_count + = 1
+                loss_count += 1
 
             if total_steps % target_update_freq == 0:
                 target_net.load_state_dict(policy_net.state_dict())
