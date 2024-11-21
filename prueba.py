@@ -7,6 +7,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from collections import deque
+import wandb
+
+
 
 # ===========================
 # Preprocessing
@@ -107,6 +110,24 @@ def train(env_name="ALE/Kaboom-v5",
           epsilon_decay=100000,
           target_update_freq=1000):
     
+    # Initialize wandb
+    wandb.init(
+        project="ProjectParadigms",  
+        entity = "joaquinap4",
+        config={
+            "env_name": env_name,
+            "episodes": episodes,
+            "batch_size": batch_size,
+            "gamma": gamma,
+            "learning_rate": lr,
+            "buffer_capacity": buffer_capacity,
+            "epsilon_start": epsilon_start,
+            "epsilon_end": epsilon_end,
+            "epsilon_decay": epsilon_decay,
+            "target_update_freq": target_update_freq,
+        }
+    )
+    
     env = gym.make(env_name)
     n_actions = env.action_space.n
     input_shape = (4, 84, 84)
@@ -134,6 +155,8 @@ def train(env_name="ALE/Kaboom-v5",
     for episode in range(episodes):
         state = frame_stack.reset(env)
         episode_reward = 0
+        episode_loss = 0 #To track the total loss per episode
+        loss_count = 0
 
         while True:
             total_steps += 1
@@ -168,16 +191,34 @@ def train(env_name="ALE/Kaboom-v5",
                 loss.backward()
                 optimizer.step()
 
+                episode_loss += loss.item()
+                loss_count + = 1
+
             if total_steps % target_update_freq == 0:
                 target_net.load_state_dict(policy_net.state_dict())
 
             if done:
                 break
+        avg_loss = episode_loss / loss_count if loss_count > 0 else 0
 
-        #print(f"Episode {episode + 1}, Reward: {episode_reward}")
+        wandb.log({
+            "episode": episode + 1,
+            "reward": episode_reward,
+            "epsilon": epsilon, 
+            "average_loss": avg_loss,
+            "steps": total_steps,
+        })
+
         with open("rewards.txt", "a") as f:
             f.write(f"Episode {episode + 1}, Reward: {episode_reward}\n")
+                                                      
+            
+
+
+        #print(f"Episode {episode + 1}, Reward: {episode_reward}")
+        
             
 
 
     env.close()
+    wandb.finish()
