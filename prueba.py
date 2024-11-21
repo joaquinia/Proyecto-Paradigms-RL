@@ -27,7 +27,7 @@ class FrameStack:
         self.frames = deque([], maxlen=k)
 
     def reset(self, env):
-        obs, _ = env.reset(return_info = True)
+        obs, info = env.reset()
         frame = preprocess_frame(obs)
         for _ in range(self.k):
             self.frames.append(frame)
@@ -113,7 +113,7 @@ def train(env_name="ALE/Kaboom-v5",
     # Initialize wandb
     wandb.init(
         project="ProjectParadigms",  
-        entity = "joaquinap4",
+        entity = "1665890",
         config={
             "env_name": env_name,
             "episodes": episodes,
@@ -218,10 +218,12 @@ def train(env_name="ALE/Kaboom-v5",
             
 
 
-        #print(f"Episode {episode + 1}, Reward: {episode_reward}")
+        print(f"Episode {episode + 1}, Reward: {episode_reward}")
         
             
 
-
+    
     env.close()
     wandb.finish()
+
+train()

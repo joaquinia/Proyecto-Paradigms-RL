@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/fhome/pmlai09/.local/Proyecto-Paradigms-RL/prueba.py", line 229, in <module>
+    train()
+  File "/fhome/pmlai09/.local/Proyecto-Paradigms-RL/prueba.py", line 131, in train
+    env = gym.make(env_name)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 687, in make
+    env_spec = _find_spec(id)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 531, in _find_spec
+    _check_version_exists(ns, name, version)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 397, in _check_version_exists
+    _check_name_exists(ns, name)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 360, in _check_name_exists
+    _check_namespace_exists(ns)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 354, in _check_namespace_exists
+    raise error.NamespaceNotFound(f"Namespace {ns} not found. {suggestion_msg}")
+gymnasium.error.NamespaceNotFound: Namespace ALE not found. Have you installed the proper package for ALE?
+Traceback (most recent call last):
+  File "/fhome/pmlai09/.local/Proyecto-Paradigms-RL/prueba.py", line 229, in <module>
+    train()
+  File "/fhome/pmlai09/.local/Proyecto-Paradigms-RL/prueba.py", line 131, in train
+    env = gym.make(env_name)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 687, in make
+    env_spec = _find_spec(id)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 531, in _find_spec
+    _check_version_exists(ns, name, version)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 397, in _check_version_exists
+    _check_name_exists(ns, name)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 360, in _check_name_exists
+    _check_namespace_exists(ns)
+  File "/fhome/pmlai09/.local/lib/python3.8/site-packages/gymnasium/envs/registration.py", line 354, in _check_namespace_exists
+    raise error.NamespaceNotFound(f"Namespace {ns} not found. {suggestion_msg}")
+gymnasium.error.NamespaceNotFound: Namespace ALE not found. Have you installed the proper package for ALE?

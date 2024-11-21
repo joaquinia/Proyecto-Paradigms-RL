@@ -1,0 +1,95 @@
+{
+  "os": "Linux-5.15.0-88-generic-x86_64-with-glibc2.29",
+  "python": "3.8.10",
+  "startedAt": "2024-11-21T16:41:34.597974Z",
+  "program": "/fhome/pmlai09/.local/Proyecto-Paradigms-RL/prueba.py",
+  "git": {
+    "remote": "https://github.com/joaquinia/Proyecto-Paradigms-RL.git",
+    "commit": "302b30673259c53a259a062fefde0850b3f6d166"
+  },
+  "email": "1665890@uab.cat",
+  "root": "/export/fhome/pmlai09/.local/Proyecto-Paradigms-RL",
+  "host": "etse-75-51",
+  "username": "pmlai09",
+  "executable": "/bin/python3",
+  "cpu_count": 32,
+  "cpu_count_logical": 64,
+  "gpu": "NVIDIA TITAN X (Pascal)",
+  "gpu_count": 10,
+  "disk": {
+    "/": {
+      "total": "884720001024",
+      "used": "80739221504"
+    }
+  },
+  "memory": {
+    "total": "270325633024"
+  },
+  "cpu": {
+    "count": 32,
+    "countLogical": 64
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN Xp",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3840,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "memoryTotal": "11811160064",
+      "cudaCores": 4352,
+      "architecture": "Turing"
+    },
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "memoryTotal": "11811160064",
+      "cudaCores": 4352,
+      "architecture": "Turing"
+    },
+    {
+      "name": "NVIDIA TITAN X (Pascal)",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Pascal"
+    }
+  ],
+  "cudaVersion": "12.4"
+}
