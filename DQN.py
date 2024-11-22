@@ -16,7 +16,7 @@ import wandb
 # ===========================
 def preprocess_frame(frame, new_shape=(84, 84)):
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    cropped_frame = gray[34:194, :]  # Adjust based on the game
+    cropped_frame = gray[34:194, :]  
     resized_frame = cv2.resize(cropped_frame, new_shape, interpolation=cv2.INTER_AREA)
     normalized_frame = (resized_frame / 255.0) * 2 - 1
     return normalized_frame
