@@ -9,7 +9,7 @@ import torch.optim as optim
 from collections import deque
 import wandb
 
-
+#DQN BASELINE IMPLEMENTATION
 
 # ===========================
 # Preprocessing
