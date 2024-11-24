@@ -1,11 +1,13 @@
-import random
-from collections import deque
-import numpy as np
+
 import gymnasium as gym
+import numpy as np
+import random
+import collections
 import cv2
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from collections import deque
 import wandb
 
 # ===========================
@@ -61,15 +63,6 @@ class DQN(nn.Module):
 
     def forward(self, x):
         return self.net(x)
-    
-# ===========================
-# Epsilon-Greedy Policy
-# ===========================
-def epsilon_greedy_policy(q_values, epsilon, n_actions):
-    if random.random() < epsilon:
-        return random.randint(0, n_actions - 1)
-    else:
-        return torch.argmax(q_values).item()
 
 # ===========================
 # Prioritized Replay Buffer
@@ -96,7 +89,6 @@ class PrioritizedReplayBuffer:
         if len(self.buffer) == 0:
             raise ValueError("The buffer is empty.")
         
-        # Calculate sampling probabilities
         priorities = np.array(self.priorities)
         probabilities = priorities ** self.alpha
         probabilities /= probabilities.sum()
@@ -125,7 +117,16 @@ class PrioritizedReplayBuffer:
         return len(self.buffer)
 
 # ===========================
-# Training Loop with Prioritized Replay Buffer
+# Epsilon-Greedy Policy
+# ===========================
+def epsilon_greedy_policy(q_values, epsilon, n_actions):
+    if random.random() < epsilon:
+        return random.randint(0, n_actions - 1)
+    else:
+        return q_values.argmax().item()
+
+# ===========================
+# Training Loop
 # ===========================
 def train(env_name="ALE/Kaboom-v5",
           episodes=500,
@@ -141,9 +142,8 @@ def train(env_name="ALE/Kaboom-v5",
           epsilon_decay=100000,
           target_update_freq=1000):
 
-    # Initialize wandb
     wandb.init(
-        project="ProjectParadigms",  
+        project="ProjectParadigms",
         entity="1665890",
         config={
             "env_name": env_name,
@@ -166,27 +166,21 @@ def train(env_name="ALE/Kaboom-v5",
     n_actions = env.action_space.n
     input_shape = (4, 84, 84)
 
-    # Frame stacker
     frame_stack = FrameStack(k=4)
-
-    # DQNs
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     policy_net = DQN(input_shape, n_actions).to(device)
     target_net = DQN(input_shape, n_actions).to(device)
     target_net.load_state_dict(policy_net.state_dict())
     target_net.eval()
 
-    # Prioritized replay buffer
     replay_buffer = PrioritizedReplayBuffer(buffer_capacity, alpha)
     optimizer = optim.Adam(policy_net.parameters(), lr=lr)
 
-    # Epsilon and beta decay
     epsilon = epsilon_start
     epsilon_decay_step = (epsilon_start - epsilon_end) / epsilon_decay
     beta = beta_start
     beta_increment = (1.0 - beta_start) / beta_frames
 
-    # Training loop
     total_steps = 0
     for episode in range(episodes):
         state = frame_stack.reset(env)
@@ -203,7 +197,6 @@ def train(env_name="ALE/Kaboom-v5",
             state = next_state
             episode_reward += reward
 
-            # Decay epsilon and beta
             epsilon = max(epsilon_end, epsilon - epsilon_decay_step)
             beta = min(1.0, beta + beta_increment)
 
@@ -222,14 +215,14 @@ def train(env_name="ALE/Kaboom-v5",
                     targets = rewards + gamma * next_q_values * (1 - dones)
 
                 q_values = policy_net(states).gather(1, actions).squeeze(-1)
-                loss = (weights * nn.MSELoss(reduction='none')(q_values, targets)).mean()
+                td_errors = nn.MSELoss(reduction='none')(q_values, targets)
 
+                loss = (weights * td_errors).mean()
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
 
-                # Update priorities
-                priorities = (loss.detach().cpu().numpy() + 1e-5).tolist()
+                priorities = (td_errors.detach().cpu().numpy() + 1e-5).tolist()
                 replay_buffer.update_priorities(indices, priorities)
 
             if total_steps % target_update_freq == 0:
