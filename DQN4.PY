@@ -1,6 +1,13 @@
 import warnings
 warnings.filterwarnings('ignore')
+from ale_py import ALEInterface
+ale = ALEInterface()
+from ale_py import ALEInterface
+ale = ALEInterface()
+import ale_py
+gym.register_envs(ale_py)
 
+import os
 import gymnasium as gym
 import numpy as np
 import random
@@ -126,7 +133,7 @@ def epsilon_greedy_policy(q_values, epsilon, n_actions):
 # Main Training Loop
 # ===========================
 def train(env_name="ALE/Kaboom-v5",
-          episodes=500,
+          episodes=1000,
           batch_size=32,
           gamma=0.99,
           lr=1e-4,
@@ -135,6 +142,12 @@ def train(env_name="ALE/Kaboom-v5",
           epsilon_end=0.1,
           epsilon_decay=100000,
           target_update_freq=5000):
+    
+    # Directory to save the model
+    save_dir = "logs"
+    os.makedirs(save_dir, exist_ok=True)  # Ensure the directory exists
+    save_model_path = os.path.join(save_dir, "dqn_model.pth")
+    
     
     # Initialize wandb
     wandb.init(
@@ -241,6 +254,9 @@ def train(env_name="ALE/Kaboom-v5",
 
         print(f"Episode {episode + 1}, Reward: {episode_reward}")
 
+    # Save the trained model
+    torch.save(policy_net.state_dict(), save_model_path)
+    print(f"Model saved to {save_model_path}")
     env.close()
     wandb.finish()
 
