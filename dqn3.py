@@ -90,12 +90,13 @@ class ReplayBuffer:
         batch = random.sample(self.buffer, batch_size)
         state, action, reward, next_state, done = zip(*batch)
         return (
-            torch.stack(state),
+            torch.stack(state).to(self.device),
             torch.tensor(action, dtype=torch.int64).to(self.device),
             torch.tensor(reward, dtype=torch.float32).to(self.device),
-            torch.stack(next_state),
+            torch.stack(next_state).to(self.device),
             torch.tensor(done, dtype=torch.uint8).to(self.device),
         )
+
 
     def __len__(self):
         return len(self.buffer)
