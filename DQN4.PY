@@ -133,8 +133,8 @@ def epsilon_greedy_policy(q_values, epsilon, n_actions):
 # Main Training Loop
 # ===========================
 def train(env_name="ALE/Kaboom-v5",
-          episodes=1000,
-          batch_size=32,
+          episodes=10000,
+          batch_size=64,
           gamma=0.99,
           lr=1e-4,
           buffer_capacity=50000,
@@ -257,7 +257,14 @@ def train(env_name="ALE/Kaboom-v5",
     # Save the trained model
     torch.save(policy_net.state_dict(), save_model_path)
     print(f"Model saved to {save_model_path}")
+
+    # Log the model to WandB as an artifact
+    artifact = wandb.Artifact("dqn_model", type="model")
+    artifact.add_file(save_model_path)
+    wandb.log_artifact(artifact)
+
     env.close()
     wandb.finish()
+
 
 train()
