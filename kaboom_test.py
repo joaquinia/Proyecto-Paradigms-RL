@@ -136,7 +136,7 @@ def epsilon_greedy_policy(q_values, epsilon, n_actions):
 # params
 model = path_to_model
 
-env = make_env(ENV_NAME, render_mode="rgb_array")
+env = gym.make(ENV_NAME, render_mode="rgb_array")
 net = DQN(env.observation_space.shape, env.action_space.n)
 net.load_state_dict(torch.load(model, map_location=torch.device(device)))
 
