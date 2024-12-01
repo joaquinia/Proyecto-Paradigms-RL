@@ -1,5 +1,15 @@
+
 import warnings
-import os
+warnings.filterwarnings('ignore')
+import gymnasium as gym
+from ale_py import ALEInterface
+ale = ALEInterface()
+from ale_py import ALEInterface
+ale = ALEInterface()
+import ale_py
+gym.register_envs(ale_py)
+
+import gymnasium as gym
 import numpy as np
 import random
 import cv2
@@ -10,6 +20,7 @@ from torchvision.transforms import functional as TF
 from collections import deque
 from collections import namedtuple
 import wandb
+import os
 
 # ===========================
 # Preprocessing
