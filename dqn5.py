@@ -121,7 +121,7 @@ def epsilon_greedy_policy(q_values, epsilon, n_actions):
 # ===========================
 def train(env_name="ALE/Kaboom-v5",
           episodes=10000,
-          batch_size=64,
+          batch_size= 128,
           gamma=0.99,
           lr=1e-4,
           buffer_capacity=50000,
