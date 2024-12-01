@@ -25,8 +25,31 @@ import warnings
 from stable_baselines3 import DQN
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.evaluation import evaluate_policy
+import wandb
+from wandb.integration.sb3 import WandbCallback
 
-warnings.filterwarnings("ignore")
+
+
+# ===========================
+# Wandb Integration
+# ===========================
+# Initialize wandb
+wandb.init(
+    project="DQN-Atari-Kaboom",  # Name of your project in wandb
+    config={
+        "env_name": "ALE/Kaboom-v5",
+        "total_timesteps": 1_000_000,
+        "learning_rate": 1e-4,
+        "buffer_size": 100000,
+        "batch_size": 32,
+        "gamma": 0.99,
+        "exploration_fraction": 0.1,
+        "exploration_final_eps": 0.01,
+        "target_update_interval": 10000,
+        "train_freq": 4,
+        "gradient_steps": 1,
+    },
+)
 
 # ===========================
 # Main Function
@@ -38,41 +61,46 @@ if __name__ == "__main__":
     # Create the environment
     env = gym.make(ENV_NAME)
 
+    # Retrieve wandb config
+    config = wandb.config
+
     # Define the DQN model with CNN policy
     model = DQN(
         "CnnPolicy",         # Policy with CNN for Atari environments
         env,                 # The environment
-        verbose=1,           # Verbosity (set to 0 for silent training)
-        buffer_size=100000,  # Replay buffer size
-        learning_rate=1e-4,  # Learning rate
-        batch_size=32,       # Batch size
-        gamma=0.99,          # Discount factor
-        exploration_fraction=0.1,  # Fraction of exploration
-        exploration_final_eps=0.01,  # Minimum epsilon for exploration
-        target_update_interval=10000,  # Update target network every 10k steps
-        train_freq=4,        # Train every 4 steps
-        gradient_steps=1,    # Gradient steps per training step
-        tensorboard_log="./logs/"  # TensorBoard log directory
+        verbose=1,           # Verbosity
+        buffer_size=config.buffer_size,
+        learning_rate=config.learning_rate,
+        batch_size=config.batch_size,
+        gamma=config.gamma,
+        exploration_fraction=config.exploration_fraction,
+        exploration_final_eps=config.exploration_final_eps,
+        target_update_interval=config.target_update_interval,
+        train_freq=config.train_freq,
+        gradient_steps=config.gradient_steps,
+        tensorboard_log="./logs/"  # Optional TensorBoard log directory
     )
 
-    # Add a callback for saving checkpoints during training
-    checkpoint_callback = CheckpointCallback(
-        save_freq=10000,         # Save every 10,000 steps
-        save_path="./checkpoints/",  # Directory to save models
-        name_prefix="dqn_kaboom"     # Prefix for the saved models
+    # Wandb Callback
+    wandb_callback = WandbCallback(
+        gradient_save_freq=100,   # Save gradients every 100 steps
+        model_save_path="./wandb_models/",  # Directory to save models
+        model_save_freq=10000,   # Save models every 10,000 steps
+        verbose=1
     )
 
     # Train the model
-    total_timesteps = 1_000_000  # Set the number of timesteps
+    total_timesteps = config.total_timesteps
     print(f"Training DQN on {ENV_NAME} for {total_timesteps} timesteps...")
-    model.learn(total_timesteps=total_timesteps, callback=checkpoint_callback)
+    model.learn(total_timesteps=total_timesteps, callback=wandb_callback)
 
     # Save the final trained model
-    model.save("dqn_kaboom_final")
+    model_path = "dqn_kaboom_final.zip"
+    model.save(model_path)
+    print(f"Final model saved as {model_path}")
 
-    # Evaluate the trained model
-    mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=10)
-    print(f"Mean reward after training: {mean_reward} ± {std_reward}")
+    # Finish wandb logging
+    wandb.finish()
 
     # Close the environment
     env.close()
