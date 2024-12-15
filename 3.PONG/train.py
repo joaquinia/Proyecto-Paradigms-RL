@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym
 import wandb
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_atari_env
