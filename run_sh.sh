@@ -1,3 +1,5 @@
+#This is the file that we have been using to run code in the cluste
+
 #!/bin/bash
 #SBATCH -n 2 # Number of cores
 #SBATCH -N 1 # Ensure that all cores are on one machine
