@@ -167,7 +167,6 @@ def test_agent(agent, env, num_episodes, device, wandb_enabled=True):
         total_rewards.append(total_reward)
         episode_lengths.append(episode_length)
 
-        # Log metrics for the current episode
         if wandb_enabled:
             wandb.log({
                 "episode": episode + 1,
@@ -211,7 +210,6 @@ def test_agent(agent, env, num_episodes, device, wandb_enabled=True):
 
 
 if __name__ == "__main__":
-    # Initialize wandb
     wandb.init(
         project="Paradigms",
         entity="mikelottogc-universitat-aut-noma-de-barcelona", 
@@ -248,5 +246,4 @@ if __name__ == "__main__":
     num_test_episodes = 20
     test_agent(agent, env, num_test_episodes, device)
 
-    # Finish wandb session
     wandb.finish()
