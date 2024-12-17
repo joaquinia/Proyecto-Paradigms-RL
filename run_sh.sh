@@ -11,5 +11,5 @@
 #SBATCH --gres gpu:1 # Para pedir graficas
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True #Environment variable in the error message of job 51765 (la que petó la ram a los 228 episodios)
-python3 /fhome/pmlai09/dqn3.py $1
+python3 /fhome/pmlai09/file_name.py $1
 
