@@ -1,19 +1,52 @@
-README 
+# README
 
-This project focuses on applying reinforcement learning techniques to solve challenges in the Arcade Learning Environment (ALE), which emulates Atari 2600 games. The primary aim is to train agents that can perform well in a selected ALE environments using various RL algorithms. The project is divided into three parts: the first involves experimenting with a simpler environment to evaluate the performance of deep Q-networks (DQN) and REINFORCE, the second tackles a more complex environment using advanced algorithms such as Advantage Actor-Critic (A2C) and Proximal Policy Optimization (PPO) and the third one consists on working in the Pong environment.  
+This project applies reinforcement learning techniques to solve challenges in the Arcade Learning Environment (ALE), which emulates Atari 2600 games. The primary goal is to train agents to perform well in selected ALE environments using various RL algorithms.
 
-In this repository there are the following folders:
-- 1.KABOOM: Where can be found both the train and test python files for dqn and reinforce. In order to execute the test files, it is needed to upload the trained models, that can be found in the FINAL_MODELS folder. kaboom_dqn_model.pth for the dqn and kaboom_PG_35k.pth or kaboom_PG_40K.pth for the reinforce. Both models are trained with the same code but one is trained during 35k episodes and the other one during 40k episodes. The reason why both models are relevant is explained in the project report. 
+## Project Structure
+The project is divided into three main parts:
 
-- 2.GALAXIAN: Following the same structure as before, in this folder both test and train files for the A2C model and for the PPO model can be found. In order to use the trained model an external file with the zip files of the models can be found in the submission as they were too heavy to be uploaded in this repository. 
+1. **Simpler Environment**: Evaluates the performance of Deep Q-Networks (DQN) and REINFORCE algorithms.
+2. **Complex Environment**: Tackles a more challenging setting using advanced algorithms like Advantage Actor-Critic (A2C) and Proximal Policy Optimization (PPO).
+3. **Pong Environment**: Focuses exclusively on training agents for Pong.
 
-- 3.PONG: Can be found both the test and the train python files. 
+## Repository Contents
 
-- FINAL_MODELS: In this files the different models can be found. 
+### 1. **KABOOM**
+Contains both the training and testing Python files for:
+- **DQN**: Requires the trained model `kaboom_dqn_model.pth` found in the `FINAL_MODELS` folder.
+- **REINFORCE**: Requires either `kaboom_PG_35k.pth` or `kaboom_PG_40K.pth` from the `FINAL_MODELS` folder. Both models were trained using the same code, but one trained for 35k episodes and the other for 40k episodes. The significance of these models is detailed in the project report.
 
-- VIDEOS: Here different videos of the trained agents for the different games can be found
+### 2. **GALAXIAN**
+Contains both the training and testing Python files for:
+- **A2C**: Advanced RL algorithm for the complex environment.
+- **PPO**: Another advanced RL algorithm.
 
-- Requirements.txt: In this file the different dependencies used in order to execute the code are specified with their corresponding version. 
+Trained models for these algorithms are provided as external files (zip files) due to their large size. These are included in the project submission but not directly uploaded to the repository.To test the models the path of the corresponding zip file must be put in the loading. 
 
-- run_sh.sh: Here the script used to execute python files on the cluster using the GPU can be found
+### 3. **PONG**
+Includes both the training and testing Python files for the Pong environment.The trained model for this algorithm is also in the external file. 
+
+### 4. **FINAL_MODELS**
+This folder contains the trained models for different environments and algorithms:
+- `kaboom_dqn_model.pth`
+- `kaboom_PG_35k.pth`
+- `kaboom_PG_40K.pth`
+
+### 5. **VIDEOS**
+Includes videos showcasing the performance of trained agents across different games.
+
+### 6. **Requirements.txt**
+Specifies the dependencies required to execute the code, along with their respective versions.
+
+### 7. **run_sh.sh**
+A script for executing Python files on a cluster using GPU resources.
+
+## Execution Notes
+- Ensure all dependencies from `Requirements.txt` are installed.
+- Trained models need to be placed in the appropriate folder (`FINAL_MODELS`) for testing to work correctly.
+- For Galaxian’s A2C and PPO models, unzip the provided external files and place them in the corresponding directory.
+
+---
+
+For additional details, refer to the project report included in the submission.
 
