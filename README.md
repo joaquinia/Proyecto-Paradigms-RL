@@ -1,4 +1,4 @@
-# README
+# FINAL PROJECT PARADIGMS OF MACHINE LEARNING - GROUP 9 
 
 This project applies reinforcement learning techniques to solve challenges in the Arcade Learning Environment (ALE), which emulates Atari 2600 games. The primary goal is to train agents to perform well in selected ALE environments using various RL algorithms.
 
