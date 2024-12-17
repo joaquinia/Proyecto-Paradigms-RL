@@ -1,4 +1,16 @@
-HOLA SOMOS EL GRUPO 6 Y VAMOS HACER UNA PRESENTACIÓN SOBRE NUESTRO VIAJE A ERITREA
+README 
+In this repository there are the following folders:
+- 1.KABOOM: Where can be found both the train and test python files for dqn and reinforce. In order to execute the test files, it is needed to upload the trained models, that can be found in the FINAL_MODELS folder. kaboom_dqn_model.pth for the dqn and kaboom_PG_35k.pth or kaboom_PG_40K.pth for the reinforce. Both models are trained with the same code but one is trained during 35k episodes and the other one during 40k episodes. The reason why both models are relevant is explained in the project report. 
 
-jojojoj
+- 2.GALAXIAN: Following the same structure as before, in this folder both test and train files for the A2C model and for the PPO model can be found. 
+
+- 3.PONG: Can be found both the test and the train python files. 
+
+- FINAL_MODELS: In this files the different models can be found. 
+
+- VIDEOS: Here different videos of the trained agents for the different games can be found
+
+- Requuirements.txt: In this file the different dependencies used in order to execute the code are specified with their corresponding version. 
+
+- run_sh.sh: Here the script used to execute python files on the cluster using the GPU can be found
 
