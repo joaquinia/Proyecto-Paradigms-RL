@@ -1,26 +1,24 @@
+# Imports
 import gymnasium as gym
-import numpy as np
-import wandb
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 from stable_baselines3 import A2C
+from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
+from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import BaseCallback
-from stable_baselines3.common.evaluation import evaluate_policy
-from wandb.integration.sb3 import WandbCallback
 from datetime import datetime
-import imageio
 import os
+import wandb
 
-# Configuration file
+#TRAINING FOR ACTOR CRITIC
+
+# Configuration
 config = {
     "policy_type": "CnnPolicy",
     "total_timesteps": 100000,
     "env_name": "ALE/Galaxian-v5",
     "model_name": "A2C_Galaxian",
     "export_path": "./exports/",
-    "videos_path": "./videos/",
-    "learning_rate": 0.0003,  # Custom learning rate
-    "ent_coef": 0.03,        # Entropy coefficient
+    "learning_rate": 0.0003,  # parameter that we have changed in order to perform hyperparameter fine-tuning
+    "ent_coef": 0.03, # entropy coefficient (also parameter to change)
 }
 
 # Wandb setup
@@ -31,20 +29,20 @@ run = wandb.init(
     save_code=True,
 )
 
-# Define the environment with frame stacking
+# we create the environment 
 def make_env(render_mode=None):
     env = gym.make(config["env_name"], render_mode=render_mode)
-    env = Monitor(env, allow_early_resets=False)  # Monitor wrapper for training
+    env = Monitor(env, allow_early_resets=False)  #wrapper for training
     return env
 
+#reward logging callback
 class RewardCallback(BaseCallback):
     def __init__(self, verbose=0):
         super(RewardCallback, self).__init__(verbose)
         self.cumulative_rewards = 0.0  # Sum of all episode rewards
-        self.num_episodes = 0          # Count of episodes
+        self.num_episodes = 0  # Count of episodes
 
     def _on_step(self) -> bool:
-        # Check if 'episode' key exists in the info dictionary
         if 'episode' in self.locals['infos'][0]:
             episode_rewards = self.locals['infos'][0]['episode']['r']
             self.cumulative_rewards += episode_rewards
@@ -52,49 +50,38 @@ class RewardCallback(BaseCallback):
             average_reward = self.cumulative_rewards / self.num_episodes
 
             print(f"Episode Reward: {episode_rewards}, Average Reward: {average_reward:.2f}")
-
-            # Log episode and average reward to WandB
-            wandb.log({
-                "episode_reward": episode_rewards,
-                "average_reward": average_reward
-            })
-
-        # Log entropy if available
-        if "entropy_loss" in self.locals:
-            entropy = -self.locals["entropy_loss"].item()
-            wandb.log({"entropy": entropy})
-
-        # Log learning rate directly from the model's policy optimizer
-        learning_rate = self.model.policy.optimizer.param_groups[0]["lr"]
-        wandb.log({"learning_rate": learning_rate})
-
-        # Log entropy coefficient
-        wandb.log({"entropy_coefficient": config["ent_coef"]})
-
+            wandb.log({"episode_reward": episode_rewards, "average_reward": average_reward})
+        
         return True
 
-# Create environment with frame stacking for training
+# create environment
 env = DummyVecEnv([make_env])
 env = VecFrameStack(env, n_stack=4)
 
-# Define and train the model with custom learning rate and entropy coefficient
+# model definition
 model = A2C(
     config["policy_type"],
     env,
-    verbose=0,
+    verbose=1,
     tensorboard_log=f"runs/{run.id}",
     learning_rate=config["learning_rate"],
     ent_coef=config["ent_coef"]
 )
 
-# Train the model with the new callback
+# Training
+print("Training started...")
 t0 = datetime.now()
 model.learn(
     total_timesteps=config["total_timesteps"],
-    callback=[RewardCallback(), WandbCallback(verbose=2)]
+    callback=[RewardCallback()]
 )
 t1 = datetime.now()
 print('>>> Training time (hh:mm:ss.ms): {}'.format(t1 - t0))
 
-# Save and export the model
+# Save model
+os.makedirs(config["export_path"], exist_ok=True)
 model.save(config["export_path"] + config["model_name"])
+print(f"Model saved to {config['export_path'] + config['model_name']}")
+
+# Close environment
+env.close()
