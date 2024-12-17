@@ -24,7 +24,7 @@ Contains both the training and testing Python files for:
 Trained models for these algorithms are provided as external files (zip files) due to their large size. These are included in the project submission but not directly uploaded to the repository.To test the models the path of the corresponding zip file must be put in the loading. 
 
 ### 3. **PONG**
-Includes both the training and testing Python files for the Pong environment.The trained model for this algorithm is also in the external file. 
+Includes both the training and testing Python files for the Pong environment.The trained model for this algorithm is also in an external file in the submission of the project in the Campus Virtual. 
 
 ### 4. **FINAL_MODELS**
 This folder contains the trained models for different environments and algorithms:
