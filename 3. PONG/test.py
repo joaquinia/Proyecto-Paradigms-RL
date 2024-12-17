@@ -5,18 +5,17 @@ from stable_baselines3.common.vec_env import VecFrameStack
 
 # Function to evaluate a trained PPO model
 def evaluate_model(model_path, env_name="PongNoFrameskip-v4", n_episodes=10):
-    # Create the Atari Pong environment
     env = make_atari_env(env_name, n_envs=1, seed=42)
 
     # Stack frames for better performance
     env = VecFrameStack(env, n_stack=4)
 
     # Load the trained model
-    model = PPO.load(model_path) #PUT THE MODEL HERE
+    model = PPO.load(model_path) 
 
     total_rewards = []
 
-    # Evaluate the model over n_episodes
+    # Evaluate the model for the selected episodes
     for episode in range(n_episodes):
         obs = env.reset()
         done = False
@@ -27,7 +26,7 @@ def evaluate_model(model_path, env_name="PongNoFrameskip-v4", n_episodes=10):
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, done, info = env.step(action)
             episode_reward += reward
-            env.render()  # Render the environment
+            env.render()  
 
         total_rewards.append(episode_reward)
         print(f"Episode {episode + 1}: Reward = {episode_reward}")
