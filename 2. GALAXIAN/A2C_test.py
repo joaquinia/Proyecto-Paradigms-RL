@@ -11,7 +11,7 @@ import os
 # Configuration
 config = {
     "env_name": "ALE/Galaxian-v5",
-    "model_path": "/content/A2C_Galaxian (1).zip", #PUT THE CORRESPONDING PATH TO UPLOAD THE MODEL FROM TRAINING!!!
+    "model_path": "/content/A2C_Galaxian (1).zip",
     "videos_path": "./videos/"
 }
 
