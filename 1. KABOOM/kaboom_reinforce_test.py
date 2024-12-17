@@ -141,10 +141,6 @@ class PGAgent(nn.Module):
         print(f"Checkpoint loaded from {filepath}")
 
 def test_agent(agent, env, num_episodes, device, wandb_enabled=True):
-    """
-    Test the trained PGAgent model on the specified environment and log metrics to wandb.
-    Dynamically uses environment's reward threshold for comparison.
-    """
     total_rewards = []
     episode_lengths = []
     reward_threshold = 500
