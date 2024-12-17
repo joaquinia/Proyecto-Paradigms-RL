@@ -76,19 +76,18 @@ class PGAgent(nn.Module):
     
     @staticmethod
     def preprocess_frame(frame, new_shape=(84, 84)):
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)  # Convert to grayscale
-        cropped_frame = gray[34:194, :]  # Crop irrelevant parts
-        resized_frame = cv2.resize(cropped_frame, new_shape, interpolation=cv2.INTER_AREA)  # Resize to 84x84
-        normalized_frame = resized_frame / 255.0  # Normalize pixel values to [0, 1]
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        cropped_frame = gray[34:194, :]
+        normalized_frame = resized_frame / 255.0
         return torch.tensor(normalized_frame, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
 
     def select_action(self, state):
         # Preprocess the frame
-        state = self.preprocess_frame(state)  # Preprocess the input frame
+        state = self.preprocess_frame(state) 
         state = state.to(self.device)
 
         # Forward pass
-        probs, V_s = self.forward(state)  # Get action probabilities and value
+        probs, V_s = self.forward(state)  
         m = Categorical(probs)
 
         # Sample action
@@ -113,7 +112,7 @@ class PGAgent(nn.Module):
             returns.insert(0, R)
 
         returns = torch.tensor(returns, device=self.device)
-        returns = (returns - returns.mean()) / (returns.std() + 1e-7)  # Normalize rewards
+        returns = (returns - returns.mean()) / (returns.std() + 1e-7) 
 
         for log_prob, reward, value in zip(self.saved_log_probs, returns, self.save_value_function):
             advantage = reward - value.item()
@@ -192,7 +191,7 @@ if __name__ == "__main__":
     ).to(device)
     agent.optimizer = optim.Adam(agent.parameters(), lr=lr)
 
-    # Load checkpoint if specified
+    # Load checkpoint if wanted
     start_episode = 0
     if load and os.path.exists(checkpoint_file):
         checkpoint = torch.load(checkpoint_file)
@@ -218,7 +217,7 @@ if __name__ == "__main__":
             # Select action
             action = agent.select_action(state)
 
-            # Perform action in environment
+            # Perform action
             next_state, reward, done, _, _ = env.step(action)
             agent.rewards.append(reward)
             episode_rewards.append(reward)
@@ -233,13 +232,12 @@ if __name__ == "__main__":
         avg_reward = np.mean(episode_rewards_history[-moving_avg_window:])
         avg_loss = np.mean(episode_losses_history[-moving_avg_window:])
 
-        # Print episode metrics
+        # Episode metrics
         print(
             f"Episode {episode + 1}, Reward: {sum(episode_rewards)}, Loss: {loss}, "
             f"Average Reward (last {moving_avg_window}): {avg_reward}, Average Loss (last {moving_avg_window}): {avg_loss}"
         )
 
-        # Log metrics to wandb
         wandb.log({
             "episode": episode + 1,
             "reward": sum(episode_rewards),
