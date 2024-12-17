@@ -10,7 +10,7 @@ In this repository there are the following folders:
 
 - VIDEOS: Here different videos of the trained agents for the different games can be found
 
-- Requuirements.txt: In this file the different dependencies used in order to execute the code are specified with their corresponding version. 
+- Requirements.txt: In this file the different dependencies used in order to execute the code are specified with their corresponding version. 
 
 - run_sh.sh: Here the script used to execute python files on the cluster using the GPU can be found
 
