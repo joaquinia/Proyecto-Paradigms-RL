@@ -5,7 +5,6 @@ from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
 from stable_baselines3.common.callbacks import BaseCallback
 
-# Initialize Weights & Biases (wandb)
 wandb.init(project="ProjectParadigmsPong", entity="1665890")
 
 # Custom callback to log metrics to wandb
@@ -40,7 +39,7 @@ class WandbCallback(BaseCallback):
                 "total_steps": self.total_steps
             })
 
-            # Print the episode metrics
+            # Episode metrics
             print(f"Episode {self.episode_count}: Reward = {episode_reward}, Length = {episode_length}")
 
         return True
@@ -50,7 +49,7 @@ class WandbCallback(BaseCallback):
         if "loss" in self.locals:
             wandb.log({"loss": self.locals["loss"]})
 
-# Create the Atari Pong environment (NoFrameskip version)
+# Create environment (NoFrameskip version)
 env = make_atari_env("PongNoFrameskip-v4", n_envs=4, seed=42)
 
 # Stack frames for better performance
@@ -89,5 +88,4 @@ while not all(done):
 
 env.close()
 
-# Finish the wandb run
 wandb.finish()
