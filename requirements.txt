@@ -1,3 +1,5 @@
+#LIST OF DEPENDENCIES 
+
 absl-py==2.1.0
 ale-py==0.10.1
 apturl==0.5.2
