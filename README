@@ -1,8 +1,11 @@
 README 
+
+This project focuses on applying reinforcement learning techniques to solve challenges in the Arcade Learning Environment (ALE), which emulates Atari 2600 games. The primary aim is to train agents that can perform well in a selected ALE environments using various RL algorithms. The project is divided into three parts: the first involves experimenting with a simpler environment to evaluate the performance of deep Q-networks (DQN) and REINFORCE, the second tackles a more complex environment using advanced algorithms such as Advantage Actor-Critic (A2C) and Proximal Policy Optimization (PPO) and the third one consists on working in the Pong environment.  
+
 In this repository there are the following folders:
 - 1.KABOOM: Where can be found both the train and test python files for dqn and reinforce. In order to execute the test files, it is needed to upload the trained models, that can be found in the FINAL_MODELS folder. kaboom_dqn_model.pth for the dqn and kaboom_PG_35k.pth or kaboom_PG_40K.pth for the reinforce. Both models are trained with the same code but one is trained during 35k episodes and the other one during 40k episodes. The reason why both models are relevant is explained in the project report. 
 
-- 2.GALAXIAN: Following the same structure as before, in this folder both test and train files for the A2C model and for the PPO model can be found. 
+- 2.GALAXIAN: Following the same structure as before, in this folder both test and train files for the A2C model and for the PPO model can be found. In order to use the trained model an external file with the zip files of the models can be found in the submission as they were too heavy to be uploaded in this repository. 
 
 - 3.PONG: Can be found both the test and the train python files. 
 
